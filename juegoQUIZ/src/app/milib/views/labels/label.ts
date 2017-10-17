@@ -7,7 +7,7 @@ export class Label extends View{
     private sTexto:string=null;
 
     private sFontStyle:string;
-    private sFontColor:string='red';
+    private sFontColor:string='black';
     private sAlign:string= "center";
     private sBaseLine:string="top"; 
     private nXText:number=0;
