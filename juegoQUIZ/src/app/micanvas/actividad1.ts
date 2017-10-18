@@ -18,6 +18,7 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
     private btnContinuar:Button;
     private btnFin:Button;
     private imagenQuiz:Imagen;
+    //private imagenTrans:Panel;
     private window1:Window;
     private wGanar:Window;
     private wPerder:Window;
@@ -43,41 +44,48 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
     }
 
     private setTextPrRes():void{
-        console.log("-----------INDICE" + this.indice);
-        this.lblPregunta.setTexto(this.arrPr[this.indice]);
-        
-        for(var f = 0; f < this.arrRes[this.indice].length; f++){
-            console.log(this.arrRes[this.indice][f]);
-            if (f==0) {
-                this.btn1.setTexto(this.arrRes[this.indice][f]); 
-            }else if (f==1) {
-                this.btn2.setTexto(this.arrRes[this.indice][f]);
-            } else if(f==2){
-                this.btn3.setTexto(this.arrRes[this.indice][f]);
-            }else if(f==3){
-                this.btn4.setTexto(this.arrRes[this.indice][f]);
-            }
+        if(this.indice>=this.arrPr.length){
+            this.crearEscenarioGanar();
+        }else{
+            this.lblPregunta.setTexto(this.arrPr[this.indice]);
             
+            for(var f = 0; f < this.arrRes[this.indice].length; f++){
+                console.log(this.arrRes[this.indice][f]);
+                if (f==0) {
+                    this.btn1.setTexto(this.arrRes[this.indice][f]); 
+                }else if (f==1) {
+                    this.btn2.setTexto(this.arrRes[this.indice][f]);
+                } else if(f==2){
+                    this.btn3.setTexto(this.arrRes[this.indice][f]);
+                }else if(f==3){
+                    this.btn4.setTexto(this.arrRes[this.indice][f]);
+                }
+            }  
         }
-        console.log("indice-----------INDICE" + this.indice);
     }
 
-    private crearEscenarioGanarPerder():void{
-        if(this.indice==this.arrPr.length){
+    private crearEscenarioGanar():void{
+        if(this.indice>=this.arrPr.length){
             //---> VENTANA Ganar
             this.wGanar = new Window(this.motor,0,0,DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
             this.motor.addViewToParentView(this.imagenFondo,this.wGanar);
             this.wGanar.setImagePath('./assets/fVictoria.jpg');
             this.motor.setViewVisibility(this.window1.uid,false);
-        }else{
-            console.log("perdiste");
+            this.motor.setViewVisibility(this.wGanar.uid,true);
         }
+        
     }
 
-    /**
-     * OJO!! AUNQUE EN ESTE EJEMPLO SE USE EL PANEL, ES OBLIGATORIO CREAR UN OBJETO WINDOW EN EL MILIB, Y AGREGARLE EL BOTON
-     * DE SALIR EN LA ESQUINA COMO SALE EN EL LA PAGINA WEB. HABRA QUE QUITAR EL PANEL Y USAR WINDOW
-     */
+    private crearEscenarioPerder():void{
+        //---> VENTANA Perder
+        this.wPerder = new Window(this.motor,0,0,DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
+        this.wPerder.setImagePath('./assets/fGameOver.png');
+        this.motor.addViewToParentView(this.imagenFondo,this.wPerder);
+        this.motor.setViewVisibility(this.window1.uid,false);
+        this.motor.setViewVisibility(this.wPerder.uid,true);
+        //this.wGanar.btnSalir.setListener(this);
+    }
+
     private crearEscenarioMenu():void{
         let pmw=DataHolder.instance.nScreenWidth*0.6;
         let pmh=DataHolder.instance.nScreenHeight*0.6;
@@ -135,6 +143,9 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
         this.motor.addViewToParentView(this.imagenFondo,this.window1);
         this.window1.btnSalir.setListener(this);
 
+        //---->Imagen sobre ventana para utilizar le window para ganar y perder
+        //this.imagenTrans = new Panel(this.motor,0,0,DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
+
         //---> PREGUNTA
         this.lblPregunta = new Label (this.motor,DataHolder.instance.nScreenWidth*0.1,DataHolder.instance.nScreenHeight*0.2,DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight>>4);
         this.lblPregunta.setColor("red");
@@ -171,15 +182,6 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
 
     }
 
-    private crearEscenarioPerder():void{
-        //---> VENTANA Perder
-        this.wPerder = new Window(this.motor,0,0,DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
-        this.wPerder.setImagePath('./assets/fGameOver.png');
-        this.motor.addViewToParentView(this.imagenFondo,this.wPerder);
-        //this.wGanar.btnSalir.setListener(this);
-    }
-
-
     screenSizeChanged?(vWidth:number,vHeight:number):void{
         console.log("SE HA ACTUALIZADO EL TEMAÑO DE LA PANTALLA");
       }
@@ -208,6 +210,7 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
                 
               }else{
                 console.log("Fallaste");
+                this.crearEscenarioPerder();
             
             }
             
@@ -220,6 +223,7 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
                
             }else{
                 console.log("Fallaste");
+                this.crearEscenarioPerder();
                 
             }
           
@@ -232,6 +236,7 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
               
             }else{
                 console.log("Fallaste");
+                this.crearEscenarioPerder();
                 
             }
         }else if (this.btn4==btn) {
@@ -243,6 +248,7 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
                
             }else{
                 console.log("Fallaste");
+                this.crearEscenarioPerder();
             }
         }
         
