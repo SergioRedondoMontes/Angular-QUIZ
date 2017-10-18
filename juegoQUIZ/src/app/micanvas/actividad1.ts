@@ -42,14 +42,35 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
         this.crearEscenarioJuego();
     }
 
+    private setTextPrRes():void{
+        console.log("-----------INDICE" + this.indice);
+        this.lblPregunta.setTexto(this.arrPr[this.indice]);
+        
+        for(var f = 0; f < this.arrRes[this.indice].length; f++){
+            console.log(this.arrRes[this.indice][f]);
+            if (f==0) {
+                this.btn1.setTexto(this.arrRes[this.indice][f]); 
+            }else if (f==1) {
+                this.btn2.setTexto(this.arrRes[this.indice][f]);
+            } else if(f==2){
+                this.btn3.setTexto(this.arrRes[this.indice][f]);
+            }else if(f==3){
+                this.btn4.setTexto(this.arrRes[this.indice][f]);
+            }
+            
+        }
+        console.log("indice-----------INDICE" + this.indice);
+    }
 
-    private crearEscenarioGanar():void{
+    private crearEscenarioGanarPerder():void{
         if(this.indice==this.arrPr.length){
             //---> VENTANA Ganar
             this.wGanar = new Window(this.motor,0,0,DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
             this.motor.addViewToParentView(this.imagenFondo,this.wGanar);
             this.wGanar.setImagePath('./assets/fVictoria.jpg');
-            //this.wGanar.btnSalir.setListener(this);
+            this.motor.setViewVisibility(this.window1.uid,false);
+        }else{
+            console.log("perdiste");
         }
     }
 
@@ -78,14 +99,14 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
         this.btnContinuar.setTexto("Continuar");
         this.btnContinuar.setImagePath('./assets/botonMenu.png');
         this.motor.addViewToParentView(this.imagenQuiz,this.btnContinuar);
+        this.btnContinuar.setListener(this);
 
         this.btnFin = new Button(this.motor,this.imagenFondo.w*0.7,this.btnContinuar.y+100,this.imagenQuiz.w/4,100);
         this.btnFin.setTexto("Salir");
         this.btnFin.setImagePath('./assets/botonMenu.png');
         this.motor.addViewToParentView(this.imagenQuiz,this.btnFin);
-
-        
-        
+        this.btnFin.setListener(this);
+         
     }
 
     private crearEscenarioJuego():void{
@@ -167,53 +188,24 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
           if (this.btnEmpezar==btn) {
             this.motor.setViewVisibility(this.imagenQuiz.uid,false);
             this.motor.setViewVisibility(this.window1.uid,true);
-            //for(var i = 0; i <= this.indice; i++){
-                this.lblPregunta.setTexto(this.arrPr[this.indice]);
-                
-                for(var f = 0; f < this.arrRes[this.indice].length; f++){
-                    if (f==0) {
-                        this.btn1.setTexto(this.arrRes[this.indice][f]); 
-                    }else if (f==1) {
-                        this.btn2.setTexto(this.arrRes[this.indice][f]);
-                    } else if(f==2){
-                        this.btn3.setTexto(this.arrRes[this.indice][f]);
-                    }else if(f==3){
-                        this.btn4.setTexto(this.arrRes[this.indice][f]);
-                    }
-                    
-                }
-                
-             //}
-             
+            this.setTextPrRes();
+            console.log("-----------INDICE" + this.indice);
+            
+          }else if(this.btnContinuar==btn){
+            this.motor.setViewVisibility(this.imagenQuiz.uid,false);
+            this.motor.setViewVisibility(this.window1.uid,true);
+            this.setTextPrRes();
             
           }else if (this.window1.btnSalir==btn) {
             this.motor.setViewVisibility(this.imagenQuiz.uid,true);
             this.motor.setViewVisibility(this.window1.uid,false);
-            this.indice=0;
-            //|| this.btn2==btn || this.btn3==btn || this.btn4 == btn
+
+
           }else if (this.btn1==btn) {
               if (this.btn1.texto === this.arrRes[this.indice][this.arrResOk[this.indice]]) {
                 this.indice=this.indice+1;
-                //   console.log("texto boton---" + this.btn1.texto);
-            //   console.log("texto indice---" + this.arrRes[this.indice][this.arrResOk[this.indice]]);
-            //for(var i = 0; i <= this.indice; i++){
-                this.lblPregunta.setTexto(this.arrPr[this.indice]);
+                this.setTextPrRes();
                 
-                for(var f = 0; f < this.arrRes[this.indice].length; f++){
-                    console.log(this.arrRes[this.indice][f]);
-                    if (f==0) {
-                        this.btn1.setTexto(this.arrRes[this.indice][f]); 
-                    }else if (f==1) {
-                        this.btn2.setTexto(this.arrRes[this.indice][f]);
-                    } else if(f==2){
-                        this.btn3.setTexto(this.arrRes[this.indice][f]);
-                    }else if(f==3){
-                        this.btn4.setTexto(this.arrRes[this.indice][f]);
-                    }
-                    
-                }
-                
-             //}
               }else{
                 console.log("Fallaste");
                 
@@ -223,27 +215,9 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
             console.log("texto boton---" + this.btn2.texto);
             console.log("texto indice---" + this.arrRes[this.indice][this.arrResOk[this.indice]]);
             if (this.btn2.texto === this.arrRes[this.indice][this.arrResOk[this.indice]]) {
-              this.indice=this.indice+1;
-
+                this.indice=this.indice+1;
+                this.setTextPrRes();
                
-          //for(var i = 0; i <= this.indice; i++){
-              this.lblPregunta.setTexto(this.arrPr[this.indice]);
-              
-              for(var f = 0; f < this.arrRes[this.indice].length; f++){
-                  console.log(this.arrRes[this.indice][f]);
-                  if (f==0) {
-                      this.btn1.setTexto(this.arrRes[this.indice][f]); 
-                  }else if (f==1) {
-                      this.btn2.setTexto(this.arrRes[this.indice][f]);
-                  } else if(f==2){
-                      this.btn3.setTexto(this.arrRes[this.indice][f]);
-                  }else if(f==3){
-                      this.btn4.setTexto(this.arrRes[this.indice][f]);
-                  }
-                  
-              }
-              
-           //}
             }else{
                 console.log("Fallaste");
                 
@@ -253,27 +227,9 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
             console.log("texto boton---" + this.btn3.texto);
             console.log("texto indice---" + this.arrRes[this.indice][this.arrResOk[this.indice]]);
             if (this.btn3.texto === this.arrRes[this.indice][this.arrResOk[this.indice]]) {
-              this.indice=this.indice+1;
-
-               
-          //for(var i = 0; i <= this.indice; i++){
-              this.lblPregunta.setTexto(this.arrPr[this.indice]);
+                this.indice=this.indice+1;
+                this.setTextPrRes();
               
-              for(var f = 0; f < this.arrRes[this.indice].length; f++){
-                  console.log(this.arrRes[this.indice][f]);
-                  if (f==0) {
-                      this.btn1.setTexto(this.arrRes[this.indice][f]); 
-                  }else if (f==1) {
-                      this.btn2.setTexto(this.arrRes[this.indice][f]);
-                  } else if(f==2){
-                      this.btn3.setTexto(this.arrRes[this.indice][f]);
-                  }else if(f==3){
-                      this.btn4.setTexto(this.arrRes[this.indice][f]);
-                  }
-                  
-              }
-              
-           //}
             }else{
                 console.log("Fallaste");
                 
@@ -282,27 +238,9 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
             console.log("texto boton---" + this.btn4.texto);
             console.log("texto indice---" + this.arrRes[this.indice][this.arrResOk[this.indice]]);
             if (this.btn4.texto === this.arrRes[this.indice][this.arrResOk[this.indice]]) {
-              this.indice=this.indice+1;
-
+                this.indice=this.indice+1;
+                this.setTextPrRes();
                
-          //for(var i = 0; i <= this.indice; i++){
-              this.lblPregunta.setTexto(this.arrPr[this.indice]);
-              
-              for(var f = 0; f < this.arrRes[this.indice].length; f++){
-                  console.log(this.arrRes[this.indice][f]);
-                  if (f==0) {
-                      this.btn1.setTexto(this.arrRes[this.indice][f]); 
-                  }else if (f==1) {
-                      this.btn2.setTexto(this.arrRes[this.indice][f]);
-                  } else if(f==2){
-                      this.btn3.setTexto(this.arrRes[this.indice][f]);
-                  }else if(f==3){
-                      this.btn4.setTexto(this.arrRes[this.indice][f]);
-                  }
-                  
-              }
-              
-           //}
             }else{
                 console.log("Fallaste");
             }
