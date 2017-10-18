@@ -195,7 +195,7 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
             this.motor.setViewVisibility(this.imagenQuiz.uid,false);
             this.motor.setViewVisibility(this.window1.uid,true);
             this.setTextPrRes();
-            
+
           }else if (this.window1.btnSalir==btn) {
             this.motor.setViewVisibility(this.imagenQuiz.uid,true);
             this.motor.setViewVisibility(this.window1.uid,false);
@@ -208,7 +208,7 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
                 
               }else{
                 console.log("Fallaste");
-                
+            
             }
             
           }else if (this.btn2==btn) {
