@@ -19,6 +19,8 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
     private btnFin:Button;
     private imagenQuiz:Imagen;
     private window1:Window;
+    private wGanar:Window;
+    private wPerder:Window;
     private lblPregunta:Label;
     private btn1:Button;
     private btn2:Button;
@@ -38,6 +40,17 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
         this.motor.setRaiz(this.imagenFondo);
         this.crearEscenarioMenu();
         this.crearEscenarioJuego();
+    }
+
+
+    private crearEscenarioGanar():void{
+        if(this.indice==this.arrPr.length){
+            //---> VENTANA Ganar
+            this.wGanar = new Window(this.motor,0,0,DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
+            this.motor.addViewToParentView(this.imagenFondo,this.wGanar);
+            this.wGanar.setImagePath('./assets/fVictoria.jpg');
+            //this.wGanar.btnSalir.setListener(this);
+        }
     }
 
     /**
@@ -78,11 +91,11 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
     private crearEscenarioJuego():void{
 
         this.arrPr = [
-        "¿En qué película se dieron a conocer los Minions?",
-        "Sabemos que son de color amarillo, pero... ¿qué otro color adoptan en una de las películas en las que salen?",
-        "¿Cuál es su alimento favorito?",
-        "Los Minions llevan todos gafas, pero... ¿qué otro complemento llevan?",
-        "¿Cómo se llama la niña a la que uno de ellos le regala un juguete?"
+            "¿En qué película se dieron a conocer los Minions?",
+            "Sabemos que son de color amarillo, pero... ¿qué otro color adoptan en una de las películas en las que salen?",
+            "¿Cuál es su alimento favorito?",
+            "Los Minions llevan todos gafas, pero... ¿qué otro complemento llevan?",
+            "¿Cómo se llama la niña a la que uno de ellos le regala un juguete?"
         ];
 
         this.arrRes = [
@@ -90,41 +103,59 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
             ["Rojo","Verde","Azul","Morado"],
             ["Las peras.","La pasta.","Las bananas.","Los limones"],
             ["Guantes negros.","No llevan ningún otro complemento.","Gorros azules.","Zapatos verdes"],
-            ["Margo.","Agnes.","Lucy.","Patricia"]
+            ["Margo.","Agnes.","Lucy.","Patty"]
         ];
 
-        this.arrResOk = [0,3,2,0,0];
+        this.arrResOk = [0,3,2,0,1];
         this.indice=0;
         
+        //---> VENTANA Quiz
         this.window1= new Window(this.motor,0,0,DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
         this.motor.addViewToParentView(this.imagenFondo,this.window1);
         this.window1.btnSalir.setListener(this);
 
+        //---> PREGUNTA
         this.lblPregunta = new Label (this.motor,DataHolder.instance.nScreenWidth*0.1,DataHolder.instance.nScreenHeight*0.2,DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight>>4);
         this.lblPregunta.setColor("red");
         this.lblPregunta.setTexto("Pregunta");
         this.motor.addViewToParentView(this.window1,this.lblPregunta);
 
+        //---> PRIMER respuesta
         this.btn1 = new Button(this.motor,DataHolder.instance.nScreenWidth*0.1,DataHolder.instance.nScreenHeight*0.4,DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight>>4);
         this.btn1.setTexto("Respuesta 1");
         this.btn1.setImagePath('./assets/botonMenu.png');
         this.motor.addViewToParentView(this.window1,this.btn1);
+        this.btn1.setListener(this);
 
+        //---> SEGUNDO respuesta
         this.btn2 = new Button(this.motor,DataHolder.instance.nScreenWidth*0.1,DataHolder.instance.nScreenHeight*0.5,DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight>>4);
         this.btn2.setTexto("Respuesta 2");
         this.btn2.setImagePath('./assets/botonMenu.png');
         this.motor.addViewToParentView(this.window1,this.btn2);
+        this.btn2.setListener(this);
 
+        //---> TERCERA respuesta
         this.btn3 = new Button(this.motor,DataHolder.instance.nScreenWidth*0.1,DataHolder.instance.nScreenHeight*0.6,DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight>>4);
         this.btn3.setTexto("Respuesta 3");
         this.btn3.setImagePath('./assets/botonMenu.png');
         this.motor.addViewToParentView(this.window1,this.btn3);
+        this.btn3.setListener(this);
 
+        //---> CUARTA respuesta
         this.btn4 = new Button(this.motor,DataHolder.instance.nScreenWidth*0.1,DataHolder.instance.nScreenHeight*0.7,DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight>>4);
         this.btn4.setTexto("Respuesta 4");
         this.btn4.setImagePath('./assets/botonMenu.png');
         this.motor.addViewToParentView(this.window1,this.btn4);
+        this.btn4.setListener(this);
 
+    }
+
+    private crearEscenarioPerder():void{
+        //---> VENTANA Perder
+        this.wPerder = new Window(this.motor,0,0,DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
+        this.wPerder.setImagePath('./assets/fGameOver.png');
+        this.motor.addViewToParentView(this.imagenFondo,this.wPerder);
+        //this.wGanar.btnSalir.setListener(this);
     }
 
 
@@ -136,30 +167,148 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
           if (this.btnEmpezar==btn) {
             this.motor.setViewVisibility(this.imagenQuiz.uid,false);
             this.motor.setViewVisibility(this.window1.uid,true);
-            for(var i = 0; i <= this.indice; i++){
-                this.lblPregunta.setTexto(this.arrPr[i]);
+            //for(var i = 0; i <= this.indice; i++){
+                this.lblPregunta.setTexto(this.arrPr[this.indice]);
                 
-                for(var f = 0; f < this.arrRes[i].length; f++){
-                    console.log(this.arrRes[i][f]);
+                for(var f = 0; f < this.arrRes[this.indice].length; f++){
                     if (f==0) {
-                        this.btn1.setTexto(this.arrRes[i][f]); 
+                        this.btn1.setTexto(this.arrRes[this.indice][f]); 
                     }else if (f==1) {
-                        this.btn2.setTexto(this.arrRes[i][f]);
+                        this.btn2.setTexto(this.arrRes[this.indice][f]);
                     } else if(f==2){
-                        this.btn3.setTexto(this.arrRes[i][f]);
+                        this.btn3.setTexto(this.arrRes[this.indice][f]);
                     }else if(f==3){
-                        this.btn4.setTexto(this.arrRes[i][f]);
+                        this.btn4.setTexto(this.arrRes[this.indice][f]);
                     }
                     
                 }
                 
-             }
+             //}
+             
             
-          }else if (this.window1.btnSalir=btn) {
+          }else if (this.window1.btnSalir==btn) {
             this.motor.setViewVisibility(this.imagenQuiz.uid,true);
             this.motor.setViewVisibility(this.window1.uid,false);
-          }
+            this.indice=0;
+            //|| this.btn2==btn || this.btn3==btn || this.btn4 == btn
+          }else if (this.btn1==btn) {
+              if (this.btn1.texto === this.arrRes[this.indice][this.arrResOk[this.indice]]) {
+                this.indice=this.indice+1;
+                //   console.log("texto boton---" + this.btn1.texto);
+            //   console.log("texto indice---" + this.arrRes[this.indice][this.arrResOk[this.indice]]);
+            //for(var i = 0; i <= this.indice; i++){
+                this.lblPregunta.setTexto(this.arrPr[this.indice]);
+                
+                for(var f = 0; f < this.arrRes[this.indice].length; f++){
+                    console.log(this.arrRes[this.indice][f]);
+                    if (f==0) {
+                        this.btn1.setTexto(this.arrRes[this.indice][f]); 
+                    }else if (f==1) {
+                        this.btn2.setTexto(this.arrRes[this.indice][f]);
+                    } else if(f==2){
+                        this.btn3.setTexto(this.arrRes[this.indice][f]);
+                    }else if(f==3){
+                        this.btn4.setTexto(this.arrRes[this.indice][f]);
+                    }
+                    
+                }
+                
+             //}
+              }else{
+                console.log("Fallaste");
+                
+            }
+            
+          }else if (this.btn2==btn) {
+            console.log("texto boton---" + this.btn2.texto);
+            console.log("texto indice---" + this.arrRes[this.indice][this.arrResOk[this.indice]]);
+            if (this.btn2.texto === this.arrRes[this.indice][this.arrResOk[this.indice]]) {
+              this.indice=this.indice+1;
 
+               
+          //for(var i = 0; i <= this.indice; i++){
+              this.lblPregunta.setTexto(this.arrPr[this.indice]);
+              
+              for(var f = 0; f < this.arrRes[this.indice].length; f++){
+                  console.log(this.arrRes[this.indice][f]);
+                  if (f==0) {
+                      this.btn1.setTexto(this.arrRes[this.indice][f]); 
+                  }else if (f==1) {
+                      this.btn2.setTexto(this.arrRes[this.indice][f]);
+                  } else if(f==2){
+                      this.btn3.setTexto(this.arrRes[this.indice][f]);
+                  }else if(f==3){
+                      this.btn4.setTexto(this.arrRes[this.indice][f]);
+                  }
+                  
+              }
+              
+           //}
+            }else{
+                console.log("Fallaste");
+                
+            }
+          
+        }else if (this.btn3==btn) {
+            console.log("texto boton---" + this.btn3.texto);
+            console.log("texto indice---" + this.arrRes[this.indice][this.arrResOk[this.indice]]);
+            if (this.btn3.texto === this.arrRes[this.indice][this.arrResOk[this.indice]]) {
+              this.indice=this.indice+1;
+
+               
+          //for(var i = 0; i <= this.indice; i++){
+              this.lblPregunta.setTexto(this.arrPr[this.indice]);
+              
+              for(var f = 0; f < this.arrRes[this.indice].length; f++){
+                  console.log(this.arrRes[this.indice][f]);
+                  if (f==0) {
+                      this.btn1.setTexto(this.arrRes[this.indice][f]); 
+                  }else if (f==1) {
+                      this.btn2.setTexto(this.arrRes[this.indice][f]);
+                  } else if(f==2){
+                      this.btn3.setTexto(this.arrRes[this.indice][f]);
+                  }else if(f==3){
+                      this.btn4.setTexto(this.arrRes[this.indice][f]);
+                  }
+                  
+              }
+              
+           //}
+            }else{
+                console.log("Fallaste");
+                
+            }
+        }else if (this.btn4==btn) {
+            console.log("texto boton---" + this.btn4.texto);
+            console.log("texto indice---" + this.arrRes[this.indice][this.arrResOk[this.indice]]);
+            if (this.btn4.texto === this.arrRes[this.indice][this.arrResOk[this.indice]]) {
+              this.indice=this.indice+1;
+
+               
+          //for(var i = 0; i <= this.indice; i++){
+              this.lblPregunta.setTexto(this.arrPr[this.indice]);
+              
+              for(var f = 0; f < this.arrRes[this.indice].length; f++){
+                  console.log(this.arrRes[this.indice][f]);
+                  if (f==0) {
+                      this.btn1.setTexto(this.arrRes[this.indice][f]); 
+                  }else if (f==1) {
+                      this.btn2.setTexto(this.arrRes[this.indice][f]);
+                  } else if(f==2){
+                      this.btn3.setTexto(this.arrRes[this.indice][f]);
+                  }else if(f==3){
+                      this.btn4.setTexto(this.arrRes[this.indice][f]);
+                  }
+                  
+              }
+              
+           //}
+            }else{
+                console.log("Fallaste");
+            }
+        }
+        
+          
       }
       
 }

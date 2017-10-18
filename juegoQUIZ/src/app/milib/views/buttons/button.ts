@@ -10,6 +10,7 @@ import {Imagen} from '../imgs/imagen';
 export class Button extends View {
 
     private sColor:string=null;
+    public texto:string=null;
     private lblTexto:Label=null;
     private listener:ButtonListener;
     private imgBack:Imagen=null;
@@ -82,6 +83,7 @@ export class Button extends View {
      */
     public setTexto(vtexto:string){
         this.lblTexto.setTexto(vtexto);
+        this.texto=vtexto;
     }
 
     /**
