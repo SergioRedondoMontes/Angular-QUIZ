@@ -18,10 +18,10 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
     private btnContinuar:Button;
     private btnFin:Button;
     private imagenQuiz:Imagen;
-    //private imagenTrans:Panel;
+    private imagenTrans:Imagen;
     private window1:Window;
-    private wGanar:Window;
-    private wPerder:Window;
+    private wGanar:Imagen;
+    private wPerder:Imagen;
     private lblPregunta:Label;
     private btn1:Button;
     private btn2:Button;
@@ -66,22 +66,27 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
 
     private crearEscenarioGanar():void{
         if(this.indice>=this.arrPr.length){
+            this.window1.setImagePath('./assets/fVictoria.jpg');
+            this.motor.setViewVisibility(this.imagenTrans.uid,false);
+            this.crearEscenarioJuego();
+            /*
             //---> VENTANA Ganar
-            this.wGanar = new Window(this.motor,0,0,DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
-            this.motor.addViewToParentView(this.imagenFondo,this.wGanar);
-            this.wGanar.setImagePath('./assets/fVictoria.jpg');
-            this.motor.setViewVisibility(this.window1.uid,false);
+            this.wGanar = new Imagen(this.motor,0,0,DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
+            this.motor.addViewToParentView(this.window1,this.wGanar);
+            this.wGanar.setImg('./assets/fVictoria.jpg');
+            this.motor.setViewVisibility(this.imagenTrans.uid,true);
             this.motor.setViewVisibility(this.wGanar.uid,true);
+            */
         }
         
     }
 
     private crearEscenarioPerder():void{
         //---> VENTANA Perder
-        this.wPerder = new Window(this.motor,0,0,DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
-        this.wPerder.setImagePath('./assets/fGameOver.png');
-        this.motor.addViewToParentView(this.imagenFondo,this.wPerder);
-        this.motor.setViewVisibility(this.window1.uid,false);
+        this.wPerder = new Imagen(this.motor,0,0,DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
+        this.wPerder.setImg('./assets/fGameOver.png');
+        this.motor.addViewToParentView(this.window1,this.wPerder);
+        this.motor.setViewVisibility(this.imagenTrans.uid,true);
         this.motor.setViewVisibility(this.wPerder.uid,true);
         //this.wGanar.btnSalir.setListener(this);
     }
@@ -144,40 +149,41 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
         this.window1.btnSalir.setListener(this);
 
         //---->Imagen sobre ventana para utilizar le window para ganar y perder
-        //this.imagenTrans = new Panel(this.motor,0,0,DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
+        this.imagenTrans =new Imagen(this.motor,0,0,DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight);
+        this.motor.addViewToParentView(this.window1,this.imagenTrans);
 
         //---> PREGUNTA
         this.lblPregunta = new Label (this.motor,DataHolder.instance.nScreenWidth*0.1,DataHolder.instance.nScreenHeight*0.2,DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight>>4);
         this.lblPregunta.setColor("red");
         this.lblPregunta.setTexto("Pregunta");
-        this.motor.addViewToParentView(this.window1,this.lblPregunta);
+        this.motor.addViewToParentView(this.imagenTrans,this.lblPregunta);
 
         //---> PRIMER respuesta
         this.btn1 = new Button(this.motor,DataHolder.instance.nScreenWidth*0.1,DataHolder.instance.nScreenHeight*0.4,DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight>>4);
         this.btn1.setTexto("Respuesta 1");
         this.btn1.setImagePath('./assets/botonMenu.png');
-        this.motor.addViewToParentView(this.window1,this.btn1);
+        this.motor.addViewToParentView(this.imagenTrans,this.btn1);
         this.btn1.setListener(this);
 
         //---> SEGUNDO respuesta
         this.btn2 = new Button(this.motor,DataHolder.instance.nScreenWidth*0.1,DataHolder.instance.nScreenHeight*0.5,DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight>>4);
         this.btn2.setTexto("Respuesta 2");
         this.btn2.setImagePath('./assets/botonMenu.png');
-        this.motor.addViewToParentView(this.window1,this.btn2);
+        this.motor.addViewToParentView(this.imagenTrans,this.btn2);
         this.btn2.setListener(this);
 
         //---> TERCERA respuesta
         this.btn3 = new Button(this.motor,DataHolder.instance.nScreenWidth*0.1,DataHolder.instance.nScreenHeight*0.6,DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight>>4);
         this.btn3.setTexto("Respuesta 3");
         this.btn3.setImagePath('./assets/botonMenu.png');
-        this.motor.addViewToParentView(this.window1,this.btn3);
+        this.motor.addViewToParentView(this.imagenTrans,this.btn3);
         this.btn3.setListener(this);
 
         //---> CUARTA respuesta
         this.btn4 = new Button(this.motor,DataHolder.instance.nScreenWidth*0.1,DataHolder.instance.nScreenHeight*0.7,DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight>>4);
         this.btn4.setTexto("Respuesta 4");
         this.btn4.setImagePath('./assets/botonMenu.png');
-        this.motor.addViewToParentView(this.window1,this.btn4);
+        this.motor.addViewToParentView(this.imagenTrans,this.btn4);
         this.btn4.setListener(this);
 
     }
@@ -188,20 +194,24 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
 
       buttonListenerOnClick?(btn:Button):void{
           if (this.btnEmpezar==btn) {
+            this.window1.setImagePath("./assets/fPreguntas.jpg");
             this.motor.setViewVisibility(this.imagenQuiz.uid,false);
             this.motor.setViewVisibility(this.window1.uid,true);
+            
             this.setTextPrRes();
             console.log("-----------INDICE" + this.indice);
             
           }else if(this.btnContinuar==btn){
             this.motor.setViewVisibility(this.imagenQuiz.uid,false);
             this.motor.setViewVisibility(this.window1.uid,true);
+            this.motor.setViewVisibility(this.imagenTrans.uid,true);
             this.setTextPrRes();
 
           }else if (this.window1.btnSalir==btn) {
             this.motor.setViewVisibility(this.imagenQuiz.uid,true);
             this.motor.setViewVisibility(this.window1.uid,false);
-
+            this.motor.setViewVisibility(this.imagenTrans.uid,false);
+            
 
           }else if (this.btn1==btn) {
               if (this.btn1.texto === this.arrRes[this.indice][this.arrResOk[this.indice]]) {

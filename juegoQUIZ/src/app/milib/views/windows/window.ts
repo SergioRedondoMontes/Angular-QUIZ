@@ -15,7 +15,7 @@ export class Window extends View{
         super(vMotor, vX, vY, vW, vH);
         this.imgBack=new Imagen(this.motor,vX,vY,vW,vH);
         this.motor.addViewToParentView(this,this.imgBack);
-        this.setImagePath("./assets/fPreguntas.jpg");
+        //this.setImagePath("./assets/fPreguntas.jpg");
         this.btnSalir=new Button(this.motor,DataHolder.instance.nScreenWidth-100,0,100,50);
         this.btnSalir.setImagePath("./assets/botonMenu.png");
         this.btnSalir.setTexto("SALIR");  
