@@ -110,4 +110,9 @@ export class Label extends View{
         this.sTexto=vtexto;
     }
 
+    public setSize(vWidth:number,vHeight:number):void{
+        super.setSize(vWidth,vHeight);
+        this.setTextAttrs(this.sAlign,this.sBaseLine);
+    }
+
 }

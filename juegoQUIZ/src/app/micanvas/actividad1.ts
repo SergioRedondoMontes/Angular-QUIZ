@@ -20,7 +20,7 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
     private imagenQuiz:Imagen;
     private imagenTrans:Imagen;
     private window1:Window;
-    private wGanar:Imagen;
+    private wGanar:Window;
     private wPerder:Imagen;
     private lblPregunta:Label;
     private btn1:Button;
@@ -39,6 +39,7 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
         this.imagenFondo=new Imagen(this.motor,0,0,DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
         this.imagenFondo.setImg('./assets/fondo-blanco.jpg');
         this.motor.setRaiz(this.imagenFondo);
+        EventsAdmin.instance.addListener(this);
         this.crearEscenarioMenu();
         this.crearEscenarioJuego();
     }
@@ -68,14 +69,16 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
         if(this.indice>=this.arrPr.length){
             this.window1.setImagePath('./assets/fVictoria.jpg');
             this.motor.setViewVisibility(this.imagenTrans.uid,false);
-            this.crearEscenarioJuego();
+            this.indice=0;
+            //this.crearEscenarioJuego();
             /*
             //---> VENTANA Ganar
-            this.wGanar = new Imagen(this.motor,0,0,DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
+            this.wGanar = new Window(this.motor,0,0,DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
             this.motor.addViewToParentView(this.window1,this.wGanar);
-            this.wGanar.setImg('./assets/fVictoria.jpg');
+            this.wGanar.setImagePath('./assets/fVictoria.jpg');
             this.motor.setViewVisibility(this.imagenTrans.uid,true);
             this.motor.setViewVisibility(this.wGanar.uid,true);
+            this.wGanar.btnSalir.setListener(this);
             */
         }
         
@@ -190,10 +193,19 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
 
     screenSizeChanged?(vWidth:number,vHeight:number):void{
         console.log("SE HA ACTUALIZADO EL TEMAÑO DE LA PANTALLA");
+
+        this.window1.setSize(DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
+        this.imagenTrans.setSize(DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
+        this.lblPregunta.setSize(DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight>>4);
+        this.btn1.setSize(DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight>>4);
+        this.btn2.setSize(DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight>>4);
+        this.btn3.setSize(DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight>>4);
+        this.btn4.setSize(DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight>>4);
       }
 
       buttonListenerOnClick?(btn:Button):void{
           if (this.btnEmpezar==btn) {
+              this.indice=0;
             this.window1.setImagePath("./assets/fPreguntas.jpg");
             this.motor.setViewVisibility(this.imagenQuiz.uid,false);
             this.motor.setViewVisibility(this.window1.uid,true);
@@ -208,6 +220,7 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
             this.setTextPrRes();
 
           }else if (this.window1.btnSalir==btn) {
+            console.log("BOTON CLICKEADO");
             this.motor.setViewVisibility(this.imagenQuiz.uid,true);
             this.motor.setViewVisibility(this.window1.uid,false);
             this.motor.setViewVisibility(this.imagenTrans.uid,false);

@@ -91,8 +91,15 @@ export class Button extends View {
      * @param e Evento de MouseEvent con los detalles del evento.
      */
     public mouseClicked(e:MouseEvent):void{
+        
         if(this.listener!=null && this.listener.buttonListenerOnClick!=undefined)
             this.listener.buttonListenerOnClick(this);
+    }
+
+    public setSize(vWidth:number,vHeight:number):void{
+        super.setSize(vWidth,vHeight);
+        this.imgBack.setSize(vWidth,vHeight);
+        this.lblTexto.setSize(this.w,this.h);
     }
     
 

@@ -45,10 +45,10 @@ export class EventsAdmin {
      */
     public mouseClick(e:MouseEvent){
         var vfin:View=null;
-        console.log("------>>>>");
+        //console.log("------>>>>");
         for(let i=0;i<EventsAdmin.instance.arViewsForMouseClick.length;i++){
             let vtemp:View=EventsAdmin.instance.arViewsForMouseClick[i];
-            if(vtemp.checkPointInView(e.pageX,e.pageY)){
+            if(vtemp.checkPointInView(e.pageX,e.pageY) && vtemp.blVisible){
                 vfin=vtemp;
             }
             //EventsAdmin.instance.arListeners[i].screenSizeChanged(

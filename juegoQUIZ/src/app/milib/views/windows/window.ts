@@ -16,7 +16,7 @@ export class Window extends View{
         this.imgBack=new Imagen(this.motor,vX,vY,vW,vH);
         this.motor.addViewToParentView(this,this.imgBack);
         //this.setImagePath("./assets/fPreguntas.jpg");
-        this.btnSalir=new Button(this.motor,DataHolder.instance.nScreenWidth-100,0,100,50);
+        this.btnSalir=new Button(this.motor,vW-(vW*0.05),0,vW*0.05,vH*0.05);
         this.btnSalir.setImagePath("./assets/botonMenu.png");
         this.btnSalir.setTexto("SALIR");  
         this.motor.addViewToParentView(this,this.btnSalir);
@@ -39,6 +39,11 @@ export class Window extends View{
     public setImagePath(vsPath:string):void{
         this.imgBack.setImg(vsPath);
     }
- 
+    public setSize(vWidth:number,vHeight:number):void{
+        super.setSize(vWidth,vHeight);
+        this.imgBack.setSize(vWidth,vHeight);
+        //this.btnSalir.setSize(vWidth*0.05,vHeight*0.02);
+        this.btnSalir.setPosition(vWidth-(vWidth*0.1),0);
+    }
  
 }

@@ -69,6 +69,11 @@ export class View{
             this.h=vHeight;
     }
 
+    public setPosition(vX:number,vY:number):void{
+        this.x=vX;
+        this.y=vY;
+}
+
     /**
      * Metodo que revisa si el pixel en la posicion X e Y (px y py) se encuentran dentro del view. Metodo usado para detectar
      * si se pincho con el raton encima del View.
