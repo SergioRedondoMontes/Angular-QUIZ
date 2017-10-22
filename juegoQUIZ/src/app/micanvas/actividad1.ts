@@ -104,20 +104,21 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
         this.imagenQuiz.setImg('./assets/fondoQuiz.jpg');
         this.motor.addViewToParentView(this.imagenFondo,this.imagenQuiz);
 
-        this.btnEmpezar = new Button(this.motor,this.imagenFondo.w*0.7,200,this.imagenQuiz.w/4,100);
+        this.btnEmpezar = new Button(this.motor,this.imagenFondo.w*0.7,this.imagenFondo.w*0.12,this.imagenQuiz.w/4,this.imagenQuiz.w*0.15);
         // this.btnEmpezar = new Button(this.motor,this.imagenQuiz.x+1000,200,this.imagenQuiz.w/4,100);
         this.btnEmpezar.setTexto("Empezar");
         this.btnEmpezar.setImagePath('./assets/botonMenu.png');
         this.motor.addViewToParentView(this.imagenQuiz,this.btnEmpezar);
         this.btnEmpezar.setListener(this);
 
-        this.btnContinuar = new Button(this.motor,this.imagenFondo.w*0.7,this.btnEmpezar.y+100,this.imagenQuiz.w/4,100);
+        //this.btnContinuar = new Button(this.motor,this.imagenFondo.w*0.7,this.btnEmpezar.y+100,this.imagenQuiz.w/4,100);
+        this.btnContinuar = new Button(this.motor,this.imagenFondo.w*0.7,this.imagenFondo.w*0.22,this.imagenQuiz.w/4,this.imagenQuiz.w*0.15);
         this.btnContinuar.setTexto("Continuar");
         this.btnContinuar.setImagePath('./assets/botonMenu.png');
         this.motor.addViewToParentView(this.imagenQuiz,this.btnContinuar);
         this.btnContinuar.setListener(this);
 
-        this.btnFin = new Button(this.motor,this.imagenFondo.w*0.7,this.btnContinuar.y+100,this.imagenQuiz.w/4,100);
+        this.btnFin = new Button(this.motor,this.imagenFondo.w*0.7,this.imagenFondo.w*0.32,this.imagenQuiz.w/4,this.imagenQuiz.w*0.15);
         this.btnFin.setTexto("Salir");
         this.btnFin.setImagePath('./assets/botonMenu.png');
         this.motor.addViewToParentView(this.imagenQuiz,this.btnFin);
@@ -194,6 +195,18 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
     screenSizeChanged?(vWidth:number,vHeight:number):void{
         console.log("SE HA ACTUALIZADO EL TEMAÑO DE LA PANTALLA");
 
+        //Escenario MENU
+        this.imagenFondo.setSize(DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
+        this.imagenQuiz.setSize(DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight);
+        this.btnEmpezar.setSize(this.imagenQuiz.w/4,this.imagenQuiz.w*0.15);
+        this.btnEmpezar.setPosition(this.imagenFondo.w*0.7,this.imagenFondo.w*0.12);
+        this.btnContinuar.setSize(this.imagenQuiz.w/4,this.imagenQuiz.w*0.15);
+        this.btnContinuar.setPosition(this.imagenFondo.w*0.7,this.imagenFondo.w*0.22);
+        this.btnFin.setSize(this.imagenQuiz.w/4,this.imagenQuiz.w*0.15);
+        this.btnFin.setPosition(this.imagenFondo.w*0.7,this.imagenFondo.w*0.32);
+        
+
+        //Escenario JUEGO
         this.window1.setSize(DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
         this.imagenTrans.setSize(DataHolder.instance.nScreenWidth,DataHolder.instance.nScreenHeight);
         this.lblPregunta.setSize(DataHolder.instance.nScreenWidth>>1,DataHolder.instance.nScreenHeight>>4);
@@ -217,6 +230,7 @@ export class Actividad1 implements EventsAdminListener,ButtonListener{
             this.motor.setViewVisibility(this.imagenQuiz.uid,false);
             this.motor.setViewVisibility(this.window1.uid,true);
             this.motor.setViewVisibility(this.imagenTrans.uid,true);
+            this.window1.setImagePath("./assets/fPreguntas.jpg");
             this.setTextPrRes();
 
           }else if (this.window1.btnSalir==btn) {
